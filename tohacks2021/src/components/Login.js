@@ -12,6 +12,7 @@ import {useAuth} from '../contexts/AuthContext'
 import {useHistory} from "react-router-dom"
 import {withRouter} from "react-router-dom"
 
+
 const useStyles = makeStyles((theme) => ({
     paper: {
       marginTop: theme.spacing(8),
@@ -32,33 +33,30 @@ const useStyles = makeStyles((theme) => ({
     },
   }));
 
-const Signup = () => {
+const Login = () => {
 
     const classes = useStyles();
     // const firstnameRef = useRef()
     // const lastnameRef = useRef()
     const emailRef = useRef()
     const passwordRef = useRef()
-    const passwordConfirmRef = useRef()
-    const {signup} = useAuth()
+    const {login} = useAuth()
     const [error, setError] = useState('')
     const [loading, setLoading] = useState(false)
-    const history = useHistory()
+    
+    let history = useHistory()
 
     async function handleSubmit(e) {
         e.preventDefault()
 
-        if (passwordRef.current.value !== passwordConfirmRef.current.value) {
-            return setError("Passwords do not match")
-        }
         try {
             setError('')
             setLoading(true)
-            await signup(emailRef.current.value, passwordRef.current.value)
-            history.pushState("/")
+            await login(emailRef.current.value, passwordRef.current.value)
+            history.push("/")
         } catch(error) {
             console.log(error)
-            setError("Failed to create an account")
+            setError("Failed to sign in")
         }
         setLoading(false)
     }
@@ -68,7 +66,7 @@ const Signup = () => {
       <CssBaseline />
       <div className={classes.paper}>
         <Typography component="h1" variant="h5">
-          Sign up
+          Log In
         </Typography>
         {error && <Alert severity = "error"> {error} </Alert>}
         <form className={classes.form} noValidate onSubmit = {handleSubmit}>
@@ -123,19 +121,6 @@ const Signup = () => {
                 inputRef = {passwordRef}
               />
             </Grid>
-            <Grid item xs={12}>
-              <TextField
-                variant="outlined"
-                required
-                fullWidth
-                name="confirmpassword"
-                label="Confirm Password"
-                type="password"
-                id="password-confirm"
-                autoComplete="current-password"
-                inputRef = {passwordConfirmRef}
-              />
-            </Grid>
           </Grid>
           <Button
             type="submit"
@@ -145,12 +130,19 @@ const Signup = () => {
             className={classes.submit}
             disabled = {loading}
           >
-            Sign Up
+            Log In
           </Button>
           <Grid container justify="center">
             <Grid item>
-              <Link href="/login">
-                Already have an account? Login
+              <Link href="/forgot-password">
+                Forgot Password? 
+              </Link>
+            </Grid>
+          </Grid>
+          <Grid container justify="center">
+            <Grid item>
+              <Link href="/signup">
+                Don't have an Account? 
               </Link>
             </Grid>
           </Grid>
@@ -160,4 +152,4 @@ const Signup = () => {
       );
 }
 
-export default withRouter(Signup)
+export default withRouter(Login)
