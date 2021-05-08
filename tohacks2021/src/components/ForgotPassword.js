@@ -9,8 +9,8 @@ import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
 import {useAuth} from '../contexts/AuthContext'
-import {useHistory} from "react-router-dom"
 import {withRouter} from "react-router-dom"
+
 
 const useStyles = makeStyles((theme) => ({
     paper: {
@@ -32,49 +32,42 @@ const useStyles = makeStyles((theme) => ({
     },
   }));
 
-const Signup = () => {
+const ForgotPassword = () => {
 
     const classes = useStyles();
     // const firstnameRef = useRef()
     // const lastnameRef = useRef()
     const emailRef = useRef()
-    const passwordRef = useRef()
-    const passwordConfirmRef = useRef()
-    const {signup} = useAuth()
+    const {resetPassword} = useAuth()
     const [error, setError] = useState('')
     const [loading, setLoading] = useState(false)
-    const history = useHistory()
+    const [message, setMessage] = useState(false)
 
     async function handleSubmit(e) {
         e.preventDefault()
 
-        if (passwordRef.current.value !== passwordConfirmRef.current.value) {
-            return setError("Passwords do not match")
-        }
         try {
+            setMessage('')
             setError('')
             setLoading(true)
-            await signup(emailRef.current.value, passwordRef.current.value)
-            history.pushState("/")
+            await resetPassword(emailRef.current.value)
+            setMessage("Check your inbox for more instructions")
         } catch(error) {
             console.log(error)
-            setError("Failed to create an account")
+            setError("Failed to reset password")
         }
         setLoading(false)
     }
-    
-    // "@material-ui/core": "5.0.0-alpha.24",
-    // "@material-ui/icons": "^4.11.2",
-    // "@material-ui/lab": "5.0.0-alpha.24",
 
     return (
         <Container component="main" maxWidth="xs">
       <CssBaseline />
       <div className={classes.paper}>
         <Typography component="h1" variant="h5">
-          Sign up
+          Password Reset
         </Typography>
         {error && <Alert severity = "error"> {error} </Alert>}
+        {message && <Alert severity = "success"> {error} </Alert>}
         <form className={classes.form} noValidate onSubmit = {handleSubmit}>
           <Grid container spacing={2}>
             {/* <Grid item xs={12} sm={6}>
@@ -114,32 +107,6 @@ const Signup = () => {
                 inputRef = {emailRef}
               />
             </Grid>
-            <Grid item xs={12}>
-              <TextField
-                variant="outlined"
-                required
-                fullWidth
-                name="password"
-                label="Password"
-                type="password"
-                id="password"
-                autoComplete="current-password"
-                inputRef = {passwordRef}
-              />
-            </Grid>
-            <Grid item xs={12}>
-              <TextField
-                variant="outlined"
-                required
-                fullWidth
-                name="confirmpassword"
-                label="Confirm Password"
-                type="password"
-                id="password-confirm"
-                autoComplete="current-password"
-                inputRef = {passwordConfirmRef}
-              />
-            </Grid>
           </Grid>
           <Button
             type="submit"
@@ -149,12 +116,19 @@ const Signup = () => {
             className={classes.submit}
             disabled = {loading}
           >
-            Sign Up
+            Reset Password
           </Button>
           <Grid container justify="center">
             <Grid item>
               <Link href="/login">
-                Already have an account? Login
+                Log in
+              </Link>
+            </Grid>
+          </Grid>
+          <Grid container justify="center">
+            <Grid item>
+              <Link href="/signup">
+                Don't have an Account? 
               </Link>
             </Grid>
           </Grid>
@@ -164,4 +138,4 @@ const Signup = () => {
       );
 }
 
-export default withRouter(Signup)
+export default withRouter(ForgotPassword)
