@@ -10,7 +10,7 @@ const Page = ({emotion}) => {
         setUseWebcam(true);
     }
     return (
-        <div>
+        <div className = "PageContainer">
             <h1>Please make this face!</h1>
             <h2>{emotion}</h2>
             {!useWebcam && (
