@@ -30,7 +30,7 @@ const useStyles = makeStyles((theme) => ({
     },
   }));
 
-// export default function Signup() {
+export default function Signup() {
 
     const classes = useStyles();
     const firstnameRef = useRef()
