@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useRef, useState} from 'react';
 import Avatar from '@material-ui/core/Avatar';
 import Button from '@material-ui/core/Button';
 import CssBaseline from '@material-ui/core/CssBaseline';
@@ -32,7 +32,13 @@ const useStyles = makeStyles((theme) => ({
   }));
 
 export default function Signup() {
+
     const classes = useStyles();
+    const firstnameRef = useRef()
+    const lastnameRef = useRef()
+    const emailRef = useRef()
+    const passwordRef = useRef()
+    const {signup} = useAuth()
 
     return (
         <Container component="main" maxWidth="xs">
@@ -53,6 +59,7 @@ export default function Signup() {
                 id="firstName"
                 label="First Name"
                 autoFocus
+                ref = {firstnameRef}
               />
             </Grid>
             <Grid item xs={12} sm={6}>
@@ -64,6 +71,7 @@ export default function Signup() {
                 label="Last Name"
                 name="lastName"
                 autoComplete="lname"
+                ref = {lastnameRef}
               />
             </Grid>
             <Grid item xs={12}>
@@ -75,6 +83,7 @@ export default function Signup() {
                 label="Email Address"
                 name="email"
                 autoComplete="email"
+                ref = {emailRef}
               />
             </Grid>
             <Grid item xs={12}>
@@ -87,6 +96,7 @@ export default function Signup() {
                 type="password"
                 id="password"
                 autoComplete="current-password"
+                ref = {passwordRef}
               />
             </Grid>
           </Grid>
