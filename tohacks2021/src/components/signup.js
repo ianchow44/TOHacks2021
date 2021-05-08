@@ -1,11 +1,10 @@
 import React, {useRef, useState} from 'react';
-import Avatar from '@material-ui/core/Avatar';
 import Button from '@material-ui/core/Button';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import TextField from '@material-ui/core/TextField';
 import Link from '@material-ui/core/Link';
 import Grid from '@material-ui/core/Grid';
-import Box from '@material-ui/core/Box';
+import Alert from '@material-ui/lab/Alert';
 import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
@@ -38,7 +37,27 @@ export default function Signup() {
     const lastnameRef = useRef()
     const emailRef = useRef()
     const passwordRef = useRef()
+    const passwordConfirmRef = useRef()
     const {signup} = useAuth()
+    const [error, setError] = useState('')
+    const [loading, setLoading] = useState(false)
+
+    async function handleSubmit(e) {
+        e.preventDefault()
+
+        if (passwordRef.current.value !== passwordConfirmRef.current.value) {
+            return setError("Passwords do not match'")
+        }
+        try {
+            setError('')
+            setLoading(true)
+            await signup(emailRef.current.value, passwordRef.current.value)
+        } catch {
+            setError('Failed to create an account')
+        }
+        setLoading(false)
+        
+    }
 
     return (
         <Container component="main" maxWidth="xs">
@@ -47,7 +66,8 @@ export default function Signup() {
         <Typography component="h1" variant="h5">
           Sign up
         </Typography>
-        <form className={classes.form} noValidate>
+        {error && <Alert severity = "error"> {error} </Alert>}
+        <form name = "signup" className={classes.form} noValidate onSubmit = {handleSubmit}>
           <Grid container spacing={2}>
             <Grid item xs={12} sm={6}>
               <TextField
@@ -99,6 +119,19 @@ export default function Signup() {
                 ref = {passwordRef}
               />
             </Grid>
+            <Grid item xs={12}>
+              <TextField
+                variant="outlined"
+                required
+                fullWidth
+                name="confirmpassword"
+                label="Confirm Password"
+                type="password"
+                id="password-confirm"
+                autoComplete="current-password"
+                ref = {passwordConfirmRef}
+              />
+            </Grid>
           </Grid>
           <Button
             type="submit"
@@ -106,6 +139,7 @@ export default function Signup() {
             variant="contained"
             color="primary"
             className={classes.submit}
+            disabled = {loading}
           >
             Sign Up
           </Button>
