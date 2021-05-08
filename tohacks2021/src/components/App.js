@@ -1,6 +1,6 @@
 import React from "react";
 import Signup from "./signup";
-import GoogleVision from "./GoogleVision";
+import GoogleVision from "../apps/GoogleVision/app";
 import { BrowserRouter as Router, Route } from "react-router-dom";
 import { AuthProvider } from "../contexts/AuthContext";
 
