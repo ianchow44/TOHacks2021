@@ -1,6 +1,6 @@
 import React from "react";
 // import Signup from "./signup";
-import Form from "./Form"
+import Form from "../apps/Form/Form"
 import Signup from "./signup";
 import GoogleVision from "../apps/GoogleVision/app";
 import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
