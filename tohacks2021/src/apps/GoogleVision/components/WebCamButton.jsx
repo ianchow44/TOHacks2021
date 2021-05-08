@@ -7,7 +7,7 @@ export default function WebCamButton({onClick}) {
         <Button
                 variant="contained"
                 component="label"
-                onClick = {() => handleClick()}
+                onClick = {() => onClick()}
                 >
                 Webcam
         </Button>
