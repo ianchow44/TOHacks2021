@@ -46,7 +46,7 @@ const Page = ({emotion}) => {
             )}
             {imageSelected && image && (
                 <div>
-                    hi
+                    
                 </div>
             )}
         </div>
