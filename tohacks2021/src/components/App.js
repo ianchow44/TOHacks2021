@@ -1,4 +1,6 @@
 import React from "react";
+// import Signup from "./signup";
+import Form from "./Form"
 import Signup from "./signup";
 import GoogleVision from "../apps/GoogleVision/app";
 import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
@@ -19,6 +21,7 @@ function App() {
             <PrivateRoute path="/" exact component={Dashboard}/>
             <Route path ="/login" exact component={Login}/>
             <Route path ="/forgot-password" exact component={ForgotPassword}/>
+            <Route path = "/form" component={Form}/>
           </div>
         </Switch>
       </AuthProvider>
