@@ -1,4 +1,4 @@
-import React, {useState} from 'react'
+import React, {useState, useRef} from 'react'
 import {db} from "../firebase"
 import Button from '@material-ui/core/Button';
 import CssBaseline from '@material-ui/core/CssBaseline';
@@ -9,27 +9,8 @@ import { makeStyles } from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
 import {useHistory} from "react-router-dom"
 import {withRouter} from "react-router-dom"
+import {storage} from "../firebase"
 
-
-const useStyles = makeStyles((theme) => ({
-    paper: {
-      marginTop: theme.spacing(8),
-      display: 'flex',
-      flexDirection: 'column',
-      alignItems: 'center',
-    },
-    avatar: {
-      margin: theme.spacing(1),
-      backgroundColor: theme.palette.secondary.main,
-    },
-    form: {
-      width: '100%',
-      marginTop: theme.spacing(1),
-    },
-    submit: {
-      margin: theme.spacing(3, 0, 2),
-    },
-  }));
 
 const TestingForm = ()  => {
     const [firstName, setfirstName] = useState("")
@@ -47,7 +28,61 @@ const TestingForm = ()  => {
     const [mailingAddress, setMailingAddress] = useState("")
     const history = useHistory()
 
+    const [image, setImage] = useState(null)
+    const [URL, setURL] = useState("")
+    const [disabled, setDisabled] = useState(true)
+
+    const useStyles = makeStyles((theme) => ({
+      paper: {
+        marginTop: theme.spacing(8),
+        display: 'flex',
+        flexDirection: 'column',
+        alignItems: 'center',
+      },
+      avatar: {
+        margin: theme.spacing(1),
+        backgroundColor: theme.palette.secondary.main,
+      },
+      form: {
+        width: '100%',
+        marginTop: theme.spacing(1),
+      },
+      submit: {
+        margin: theme.spacing(3, 0, 2),
+      },
+
+    }));
+
     const classes = useStyles();
+
+    const handleChange = e => {
+      if (e.target.files[0]) {
+          setImage(e.target.files[0])
+          setDisabled(false)
+      }
+    }
+
+    const handleUpload = () => {
+      const uploadTask = storage.ref(`images/${image.name}`).put(image)
+      uploadTask.on(
+        "state_changed",
+        snapshot => {},
+        error => {
+          console.log(error)
+        },
+        () => {
+          storage
+            .ref("images")
+            .child(image.name)
+            .getDownloadURL()
+            .then(url => {
+              setURL(url)
+            })
+        },
+      )
+    }
+
+    console.log("image: ",image)
 
     const handleSubmit = (e) => {
         e.preventDefault();
@@ -65,6 +100,7 @@ const TestingForm = ()  => {
             province: province,
             country: country,
             mailingAddress: mailingAddress,
+            
         })
         .then(() => {
             alert("Form has been submitted")
@@ -73,6 +109,7 @@ const TestingForm = ()  => {
         .catch(error => {
             alert(error.message)
         })
+      
         setfirstName('')
         setOtherName('')
         setLastName('')
@@ -95,6 +132,17 @@ const TestingForm = ()  => {
           <Typography component="h1" variant="h5">
             Log In
           </Typography>
+
+          <input type="file" onChange={handleChange}/>
+          <img src={URL}/>
+          <Button 
+          onClick ={handleUpload}
+          variant="contained"
+          color="primary"
+          disabled = {disabled}
+          > Upload Photo</Button>
+
+          
           <form className={classes.form} noValidate onSubmit = {handleSubmit}>
             <Grid container spacing={2}>
                 <Grid item xs={12}>
